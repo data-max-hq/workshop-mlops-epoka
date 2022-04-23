@@ -3,8 +3,8 @@ import logging
 import dill
 import pandas as pd
 
-from app.ml_utils import CleanTextTransformer, SpacyTokenTransformer
-from app.RedditClassifier import RedditClassifier
+from ml_utils import CleanTextTransformer, SpacyTokenTransformer
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
@@ -74,17 +74,18 @@ lr.fit(x_train_tfidf, y_train)
 # These are the models we'll deploy
 logging.info("Dump models.")
 # pickle.dump(tfidf_vectorizer, open("../models/tfidf_vectorizer.model", "wb"))
-with open("../models/tfidf_vectorizer.model", "wb") as model_file:
+with open("../2_models/tfidf_vectorizer.model", "wb") as model_file:
     dill.dump(tfidf_vectorizer, model_file)
-with open("../models/lr.model", "wb") as model_file:
+with open("../2_models/lr.model", "wb") as model_file:
     dill.dump(lr, model_file)
 
 logging.info("Finished training.")
 
-logging.info("Test model prediction.")
-classifier = RedditClassifier(models_dir="../models")
-# With one sample
-sample = x_test[0:1]
-logging.info(sample)
-logging.info(classifier.predict(sample, ["feature_name"]))
-logging.info("Finished testing.")
+# logging.info("Test model prediction.")
+# from app.RedditClassifier import RedditClassifier
+# classifier = RedditClassifier(models_dir="../2_models")
+# # With one sample
+# sample = x_test[0:1]
+# logging.info(sample)
+# logging.info(classifier.predict(sample, ["feature_name"]))
+# logging.info("Finished testing.")
