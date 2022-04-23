@@ -108,3 +108,6 @@ curl --request POST 'http://localhost:5000/predict' \
 "alcohol": 5
 }'
 ```
+
+## ToDo:
+* Store requests to db
