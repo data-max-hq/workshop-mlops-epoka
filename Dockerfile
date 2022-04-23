@@ -1,3 +1,23 @@
+FROM python:3.8.10
+
+WORKDIR /app
+ENV MODELS_DIR "/models"
+
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+RUN python -m spacy download en_core_web_sm
+
+COPY 3_app .
+
+COPY 2_models /models
+
+EXPOSE 5000
+
+ENV FLASK_APP=app.py
+ENV FLASK_RUN_HOST=0.0.0.0
+
+CMD ["flask", "run"]
+
 #FROM python:3.8.2-slim
 #WORKDIR /app
 #
@@ -26,21 +46,3 @@
 #RUN chown -R 8888 /app
 #
 #CMD exec seldon-core-microservice $MODEL_NAME --service-type $SERVICE_TYPE
-
-FROM python:3.8.10
-
-WORKDIR /app
-
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-
-COPY app.py app.py
-# Uncomment when model file is available
-COPY model.pkl model.pkl
-
-EXPOSE 5000
-
-ENV FLASK_APP=app.py
-ENV FLASK_RUN_HOST=0.0.0.0
-
-CMD ["flask", "run"]

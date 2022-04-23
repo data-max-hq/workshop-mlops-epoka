@@ -1,7 +1,6 @@
-import pickle
-import numpy as np
 import logging
 import dill
+import os
 
 from flask import Flask, request
 from ml_utils import CleanTextTransformer, SpacyTokenTransformer
@@ -15,8 +14,10 @@ app = Flask(__name__)
 clean_text_transformer = CleanTextTransformer()
 spacy_tokenizer = SpacyTokenTransformer()
 
+models_dir = os.environ["MODELS_DIR"]
 
-def setup_app(models_dir="/models"):
+
+def setup_app():
     with open(f"{models_dir}/tfidf_vectorizer.model", "rb") as model_file:
         tfidf_vectorizer = dill.load(model_file)
 
@@ -26,7 +27,7 @@ def setup_app(models_dir="/models"):
     return tfidf_vectorizer, lr_model
 
 
-tfidf_vectorizer, lr_model = setup_app(models_dir="../2_models")
+tfidf_vectorizer, lr_model = setup_app()
 
 
 @app.route('/')
