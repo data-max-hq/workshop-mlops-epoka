@@ -46,9 +46,7 @@ Install docker for your OS from [here](https://docs.docker.com/get-docker/).
 
 ### Start local k8s cluster
 ```shell
-minikube start --memory 10000 --cpus 4 \
---driver=docker --kubernetes-version=v1.21.6 \
---mount
+minikube start --driver=docker --kubernetes-version=v1.21.6 --mount
 ```
 
 ### Check the installation
@@ -60,26 +58,14 @@ minikube dashboard
 ### Build Docker image
 #### locally
 ```shell
-cd docker
-docker build -t demo_image .
-minikube image load demo_image
+cd 4_docker
+docker build -t hello-ml .
+minikube image load hello-ml
 ```
 
-#### inside minikube (faster)
-* SSH into minikube
+### Install the application
 ```shell
-minikube ssh
-```
-
-* Build your docker image
-```shell
-cd /minikube-host/<USER>/Repos/data-max/workshop-epoka/docker
-docker build -t demo_image .
-```
-
-### Install the application (outside of minikube)
-```shell
-cd ../kubernetes
+cd ../5_kubernetes
 kubectl apply -f deployment.yaml
 ```
 
@@ -92,12 +78,19 @@ At `localhost:5000` you should see the hello message.
 ### Send request
 
 ```shell
-curl --location --request POST 'http://localhost:5005/predict' \
+curl --request POST 'http://localhost:5000/predict' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "text": ["This is a text"]
+"fixed acidity": 5,
+"volatile acidity": 5,
+"citric acid":5,
+"residual sugar": 5,
+"chlorides": 5,
+"free sulfur dioxide": 5,
+"total sulfur dioxide": 5,
+"density": 5,
+"pH": 5,
+"sulphates": 5,
+"alcohol": 5
 }'
 ```
-
-## ToDo:
-* Store requests to db
