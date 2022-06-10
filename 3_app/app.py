@@ -1,6 +1,6 @@
-import logging
 import pickle
-import os
+import numpy as np
+import logging
 
 from flask import Flask, request
 
@@ -9,20 +9,9 @@ logging.basicConfig(
     format='%(asctime)s - [%(filename)s:%(lineno)d] - %(levelname)s - %(message)s'
 )
 
+model = pickle.load(open('../2_models/model.pkl', 'rb'))
+
 app = Flask(__name__)
-clean_text_transformer = CleanTextTransformer()
-spacy_tokenizer = SpacyTokenTransformer()
-
-models_dir = os.environ["MODELS_DIR"]
-
-
-def load_model():
-    with open(f"{models_dir}/model.pkl", "rb") as model_file:
-        model = pickle.load(model_file)
-    return model
-
-
-model = load_model()
 
 
 @app.route('/')
@@ -31,26 +20,20 @@ def hello():
     return "Hello"
 
 
+# https://medium.com/analytics-vidhya/create-your-first-ml-web-app-with-flask-ed0c4bb54312
+# Refactor when model file is available
 @app.route('/predict', methods=['POST'])
 def predict():
-    """
-    Do prediction
-    :return: json with prediction
-    """
-    payload = request.json
-    logging.info(f"Payload: {payload}")
-    prediction = model.predict(payload)
+    features = list(request.json.values())
+    logging.info(f"Received json: {features}")
 
-    logging.info(f"prediction: {predictions}")
-    sentiment = predictions[0]
-    logging.info(f"sentiment: {sentiment}")
-    sentiment_json = {
-        "positive": sentiment[0],
-        "negative": sentiment[1]
-    }
+    final_features = [np.array(features)]
+    prediction = model.predict(final_features)
 
-    return sentiment_json
+    logging.info(f"prediction: {prediction}")
+
+    return prediction
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port=5005)
+    app.run(debug=True, host='0.0.0.0', port=5000)
