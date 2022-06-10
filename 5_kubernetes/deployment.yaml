@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
         - name: flask-ml
-          image: demo_image:latest
+          image: hello-ml:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 5000

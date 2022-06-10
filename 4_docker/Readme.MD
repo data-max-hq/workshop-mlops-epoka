@@ -1,3 +1,8 @@
+# Build docker image
+```bash
+docker build .
+```
+
 # cURL commands
 
 ## Hello endpoint

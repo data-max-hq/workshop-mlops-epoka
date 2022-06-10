@@ -4,7 +4,10 @@ import logging
 
 from flask import Flask, request
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - [%(filename)s:%(lineno)d] - %(levelname)s - %(message)s'
+)
 
 model = pickle.load(open('model.pkl', 'rb'))
 
@@ -25,8 +28,12 @@ def predict():
     logging.info(f"Received json: {features}")
 
     final_features = [np.array(features)]
-    prediction = model.predict(final_features)
+    prediction = model.predict(final_features)[0]
 
     logging.info(f"prediction: {prediction}")
 
-    return {"quality": prediction[0]}
+    response = {
+        "prediction": prediction
+    }
+
+    return response
