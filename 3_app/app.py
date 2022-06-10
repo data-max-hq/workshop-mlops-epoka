@@ -1,9 +1,8 @@
 import logging
-import dill
+import pickle
 import os
 
 from flask import Flask, request
-from ml_utils import CleanTextTransformer, SpacyTokenTransformer
 
 logging.basicConfig(
     level=logging.INFO,
@@ -17,17 +16,13 @@ spacy_tokenizer = SpacyTokenTransformer()
 models_dir = os.environ["MODELS_DIR"]
 
 
-def setup_app():
-    with open(f"{models_dir}/tfidf_vectorizer.model", "rb") as model_file:
-        tfidf_vectorizer = dill.load(model_file)
-
-    with open(f"{models_dir}/lr.model", "rb") as model_file:
-        lr_model = dill.load(model_file)
-
-    return tfidf_vectorizer, lr_model
+def load_model():
+    with open(f"{models_dir}/model.pkl", "rb") as model_file:
+        model = pickle.load(model_file)
+    return model
 
 
-tfidf_vectorizer, lr_model = setup_app()
+model = load_model()
 
 
 @app.route('/')
@@ -44,14 +39,11 @@ def predict():
     """
     payload = request.json
     logging.info(f"Payload: {payload}")
-    text_array = payload["text"]
-    clean_text = clean_text_transformer.transform(text_array)
-    spacy_tokens = spacy_tokenizer.transform(clean_text)
-    tfidf_features = tfidf_vectorizer.transform(spacy_tokens)
-    predictions = lr_model.predict_proba(tfidf_features)
+    prediction = model.predict(payload)
 
     logging.info(f"prediction: {predictions}")
     sentiment = predictions[0]
+    logging.info(f"sentiment: {sentiment}")
     sentiment_json = {
         "positive": sentiment[0],
         "negative": sentiment[1]

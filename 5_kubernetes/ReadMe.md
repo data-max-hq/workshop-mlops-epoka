@@ -25,13 +25,12 @@ brew install kubectl
 
 ## Install `docker`
 Install docker for your OS from [here](https://docs.docker.com/get-docker/).
-``
+
 ## Getting started
 
 ### Start local k8s cluster
 ```shell
-minikube start --memory 10000 --cpus 4 \
---driver=docker --kubernetes-version=v1.21.6 \
+minikube start --driver=docker --kubernetes-version=v1.21.6 \
 --mount
 ```
 
@@ -49,19 +48,7 @@ docker build -t demo_image .
 minikube image load demo_image
 ```
 
-#### inside minikube (faster)
-* SSH into minikube
-```shell
-minikube ssh
-```
-
-* Build your docker image
-```shell
-cd /minikube-host/<USER>/Repos/data-max/workshop-epoka/docker
-docker build -t demo_image .
-```
-
-### Install the application (outside of minikube)
+### Install the application manifest file
 ```shell
 cd ../kubernetes
 kubectl apply -f deployment.yaml
