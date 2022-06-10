@@ -28,11 +28,15 @@ def predict():
     logging.info(f"Received json: {features}")
 
     final_features = [np.array(features)]
-    prediction = model.predict(final_features)
+    prediction = model.predict(final_features)[0]
 
     logging.info(f"prediction: {prediction}")
 
-    return prediction
+    response = {
+        "prediction": prediction
+    }
+
+    return response
 
 
 if __name__ == "__main__":

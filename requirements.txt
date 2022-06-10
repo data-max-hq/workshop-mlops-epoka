@@ -1,6 +1,5 @@
 pandas
 werkzeug==2.0.3
-matplotlib
 jupyter
 numpy
 Flask==2.1.0
