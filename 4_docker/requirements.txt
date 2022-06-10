@@ -1,5 +1,10 @@
-pandas
+scipy==1.7.3
 werkzeug==2.0.3
-numpy
-Flask==2.1.0
-scikit-learn==1.1.1
+spacy==2.3.2
+matplotlib
+# jupyter
+flask==2.0.2
+scikit-learn==1.0.2
+pandas==1.4.1
+markupsafe==2.0.1
+requests==2.28.0
