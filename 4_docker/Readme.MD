@@ -1,6 +1,6 @@
 # Build docker image
 ```bash
-docker build .
+docker build -t hello-ml .
 ```
 
 # cURL commands
